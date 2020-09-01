@@ -11,6 +11,7 @@ public class GameUI : MonoBehaviour
 
     void Start() {
         Enemy.OnGuardHasSpottedPlayer += ShowGameLoseUI;
+        FindObjectOfType<Player>().OnReachedEndOfLevel += ShowGameWinUI;
     }
 
     void ShowGameWinUI() {

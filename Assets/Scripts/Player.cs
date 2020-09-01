@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public event System.Action OnReachedEndOfLevel;
     public float smoothMoveTime = .1f;
     public float moveSpeed = 7;
     public float turnSpeed = 8;
@@ -34,6 +35,15 @@ public class Player : MonoBehaviour
         angle = Mathf.LerpAngle(angle, targetAngle, Time.deltaTime * turnSpeed * inputMagnitude);
         smoothInputMagnitude = Mathf.SmoothDamp(smoothInputMagnitude, inputMagnitude, ref smoothMoveVelocity, smoothMoveTime);
         velocity = transform.forward * moveSpeed * smoothInputMagnitude;
+    }
+
+    void OnTriggerEnter(Collider hitCollider) {
+      if(hitCollider.tag == Tags.FINISH_TAG) {
+         Disable();
+         if(OnReachedEndOfLevel != null){
+           OnReachedEndOfLevel();
+         }
+      }
     }
 
     void Disable() {
