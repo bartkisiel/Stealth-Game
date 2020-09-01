@@ -4,19 +4,64 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+  public static event System.Action OnGuardHasSpottedPlayer;
+
   public Transform pathHolder;
   public float speed = 5;
   public float waitTime = .3f;
   public float rotationSpeed = 90;
+  public float timeToSpotPlayer = .5f;
+  public Light spotLight;
+  public float viewDistance;
+  public LayerMask viewMask;
+
+  float playerVisibleTimer;
+  float viewAngle;
+  Transform player;
+  Color originalSpotLightColor;
 
   void Start() {
     Vector3[] waypoints = new Vector3[pathHolder.childCount];
+    viewAngle = spotLight.spotAngle;
+    originalSpotLightColor = spotLight.color;
+    player = GameObject.FindGameObjectWithTag(Tags.PLAYER_TAG).transform;
+
     for(int i = 0; i < waypoints.Length; i++) {
       waypoints[i] = pathHolder.GetChild(i).position;
       waypoints[i] = new Vector3(waypoints[i].x, transform.position.y, waypoints[i].z);
     }
 
     StartCoroutine(FollowPath(waypoints));
+  }
+
+  void Update() {
+    if(CanSeePlayer()) {
+      spotLight.color = Color.red;
+    }
+    else {
+      playerVisibleTimer -= Time.deltaTime;
+    }
+    playerVisibleTimer = Mathf.Clamp(playerVisibleTimer, 0, timeToSpotPlayer);
+    spotLight.color = Color.Lerp(originalSpotLightColor, Color.red, playerVisibleTimer / timeToSpotPlayer);
+
+    if(playerVisibleTimer >= timeToSpotPlayer) {
+      if(OnGuardHasSpottedPlayer != null) {
+        OnGuardHasSpottedPlayer();
+      }
+    }
+  }
+
+  bool CanSeePlayer() {
+    if (Vector3.Distance(transform.position, player.position) < viewDistance) {
+      Vector3 dirToPlayer = (player.position - transform.position).normalized;
+      float angleBetweenGuardAndPlayer = Vector3.Angle(transform.forward, dirToPlayer);
+      if (angleBetweenGuardAndPlayer < viewAngle / 2f) {
+        if (!Physics.Linecast(transform.position, player.position, viewMask)) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   IEnumerator FollowPath(Vector3[] waypoints) {
@@ -58,6 +103,8 @@ public class Enemy : MonoBehaviour
       previousPosition = waypoint.position;
     }
     Gizmos.DrawLine(previousPosition, startPosition);
+    Gizmos.color = Color.red;
+    Gizmos.DrawRay(transform.position, transform.forward * viewDistance);
   }
 
 }
