@@ -21,10 +21,10 @@ public class Enemy : MonoBehaviour
   Color originalSpotLightColor;
 
   void Start() {
+    player = GameObject.FindGameObjectWithTag(Tags.PLAYER_TAG).transform;
     Vector3[] waypoints = new Vector3[pathHolder.childCount];
     viewAngle = spotLight.spotAngle;
     originalSpotLightColor = spotLight.color;
-    player = GameObject.FindGameObjectWithTag(Tags.PLAYER_TAG).transform;
 
     for(int i = 0; i < waypoints.Length; i++) {
       waypoints[i] = pathHolder.GetChild(i).position;
@@ -36,7 +36,7 @@ public class Enemy : MonoBehaviour
 
   void Update() {
     if(CanSeePlayer()) {
-      spotLight.color = Color.red;
+      playerVisibleTimer += Time.deltaTime;
     }
     else {
       playerVisibleTimer -= Time.deltaTime;
