@@ -7,7 +7,7 @@ public class Enemy : MonoBehaviour
   public static event System.Action OnGuardHasSpottedPlayer;
 
   public Transform pathHolder;
-  public float speed = 5;
+  public float speed = 9;
   public float waitTime = .3f;
   public float rotationSpeed = 90;
   public float timeToSpotPlayer = .5f;
