@@ -7,10 +7,11 @@ The game currently has only one playable stage and it's quite simple. At this mo
 Watch the video below to see how it works. Every guard has less than one second to spot the player when he cames into his visibility zone represented by spotlight. Player may use the walls as covers to reach his target which is small object on the ground hidden somewhere in the room. 
 <div align="left">
       <a href="https://www.youtube.com/watch?v=abHekVkg3gI">
-         <img src="https://img.youtube.com/vi/abHekVkg3gI/2.jpg" style="width:100%;">
+         <img src="https://img.youtube.com/vi/abHekVkg3gI/2.jpg" style="width:400% height:200%;">
       </a>
 </div>
 
 Features to be added: 
 * Main menu scene with volume slider in options and possibility to activate it with "Esc" button after finishing the game (won or lost): 
+
 ![Oops, something wrong with the image, let me know, please!](https://i.ibb.co/5sBJ2sB/Zrzut-ekranu-2020-09-21-o-16-10-02.png)
